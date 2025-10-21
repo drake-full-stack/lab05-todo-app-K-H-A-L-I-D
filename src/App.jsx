@@ -10,6 +10,8 @@ function App() {
     { text: "Clean Room", completed: false },
   ]);
   const [inputValue, setInputValue] = useState("");
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   // ===== Functions ======
   const handleAddTask = (e) => {
@@ -35,6 +37,35 @@ function App() {
     );
   };
 
+  const handleClearCompleted = () => {
+    setTasks(tasks.filter(task => !task.completed));
+  };
+
+  const handleEditStart = (index) => {
+    setEditingIndex(index);
+    setEditingText(tasks[index].text);
+  };
+
+  const handleEditSave = (index) => {
+    if (editingText.trim()) {
+      setTasks(
+        tasks.map((task, i) => {
+          if (i === index) {
+            return { ...task, text: editingText.trim() };
+          }
+          return task;
+        })
+      );
+    }
+    setEditingIndex(null);
+    setEditingText("");
+  };
+
+  const handleEditCancel = () => {
+    setEditingIndex(null);
+    setEditingText("");
+  };
+
   // ==== JSX that gets returned =====
   return (
     <div className="container">
@@ -52,6 +83,18 @@ function App() {
         </button>
       </form>
 
+      <div className="task-counter">
+        {tasks.filter(task => !task.completed).length} tasks remaining
+        {tasks.some(task => task.completed) && (
+          <button 
+            className="clear-completed-button"
+            onClick={handleClearCompleted}
+          >
+            Clear Completed
+          </button>
+        )}
+      </div>
+
       <ul className="task-list">
         {tasks.map((task, index) => (
           <li key={index} className="task-item">
@@ -60,9 +103,30 @@ function App() {
               checked={task.completed}
               onChange={() => handleToggle(index)}
             />
-            <span className={task.completed ? "task-text completed" : "task-text"}>
-              {task.text}
-            </span>
+            {editingIndex === index ? (
+              <input
+                type="text"
+                value={editingText}
+                onChange={(e) => setEditingText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleEditSave(index);
+                  } else if (e.key === 'Escape') {
+                    handleEditCancel();
+                  }
+                }}
+                onBlur={() => handleEditSave(index)}
+                className="edit-input"
+                autoFocus
+              />
+            ) : (
+              <span 
+                className={task.completed ? "task-text completed" : "task-text"}
+                onClick={() => handleEditStart(index)}
+              >
+                {task.text}
+              </span>
+            )}
             <button
               className="delete-button"
               onClick={() => handleDelete(index)}

@@ -85,3 +85,51 @@ h1 {
   color: #888;
   opacity: 0.6;
 }
+
+.task-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #f0f8ff;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+.clear-completed-button {
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.clear-completed-button:hover {
+  background-color: #ff5252;
+}
+
+.task-text {
+  cursor: pointer;
+  transition: background-color 0.2s;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.task-text:hover {
+  background-color: #f0f0f0;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 16px;
+  border: 2px solid #4a90e2;
+  border-radius: 3px;
+  outline: none;
+  background-color: white;
+}
